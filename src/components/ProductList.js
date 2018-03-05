@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Glyphicon } from 'react-bootstrap';
+import store from '../store';
+import { addToCar } from '../actionCreators';
 
 const styles = {
   products: {
@@ -17,7 +19,7 @@ const styles = {
 class ProductList extends Component {
   constructor() {
     super();
-    this.addToCart = this.addToCart.bind(this);
+    this.addToCar = this.addToCar.bind(this);
 
     this.state = {
       products: [
@@ -37,7 +39,7 @@ class ProductList extends Component {
             <div className="caption">
               <h4>{product.name}</h4>
               <p>
-                <Button bsStyle="primary" onClick={() => this.addToCart(product)} role="button" disabled={product.inventory <= 0}>${product.price} <Glyphicon glyph="shopping-cart" /></Button>
+                <Button bsStyle="primary" onClick={() => this.addToCar(product)} role="button" disabled={product.inventory <= 0}>${product.price} <Glyphicon glyph="shopping-cart" /></Button>
               </p>
             </div>
           </div>
@@ -46,8 +48,8 @@ class ProductList extends Component {
     );
   }
 
-  addToCart(product) {
-
+  addToCar(product) {
+    store.dispatch(addToCar(product))
   }
 }
 

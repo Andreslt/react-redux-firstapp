@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Panel, Table, Button, Glyphicon } from 'react-bootstrap';
+import store from '../store';
+import { removeFromCar } from '../actionCreators';
 
 const styles = {
   footer: {
@@ -11,11 +13,18 @@ const styles = {
 class ShoppingCart extends Component {
   constructor() {
     super();
-    this.removeFromCart = this.removeFromCart.bind(this);
+    this.removeFromCar = this.removeFromCar.bind(this);
 
     this.state = {
       cart: []
     }
+
+    store.subscribe(()=>{
+      this.setState({
+        cart: store.getState().cart
+      })
+    });
+
   }
 
   render() {
@@ -27,7 +36,7 @@ class ShoppingCart extends Component {
               <tr key={product.id}>
                 <td>{product.name}</td>
                 <td className="text-right">${product.price}</td>
-                <td className="text-right"><Button bsSize="xsmall" bsStyle="danger" onClick={() => this.removeFromCart(product)}><Glyphicon glyph="trash" /></Button></td>
+                <td className="text-right"><Button bsSize="xsmall" bsStyle="danger" onClick={() => this.removeFromCar(product)}><Glyphicon glyph="trash" /></Button></td>
               </tr>
             )}
           </tbody>
@@ -44,8 +53,8 @@ class ShoppingCart extends Component {
     )
   }
 
-  removeFromCart(product) {
-
+  removeFromCar(product) {
+    store.dispatch(removeFromCar(product));
   }
 }
 
