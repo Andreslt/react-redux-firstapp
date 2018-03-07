@@ -1,18 +1,34 @@
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
 
 const reducer = (state, action) => {
-    if (action.type === 'ADD_TO_CAR') {
-        return {
-            ...state,
-            cart: state.cart.concat(action.product)
-        }
-    } else if (action.type === 'REMOVE_FROM_CAR') {
-        return {
-            ...state,
-            cart: state.cart.filter(product => product.id !== action.product.id)
-        }
+    switch (action.type) {
+        case 'REPLACE_PRODUCTS':
+            return {
+                ...state,
+                products: action.products
+            }
+        case 'ADD_TO_CAR':
+            return {
+                ...state,
+                car: state.car.concat(action.product)
+            }
+        case 'REMOVE_FROM_CAR':
+            return {
+                ...state,
+                car: state.car.filter(product => product.id !== action.product.id)
+            }
+        default: return state;
     }
-    return state;
 }
 
-export default createStore(reducer, { cart: [] });
+const logger = store => next => action => {
+    console.group(action.type)
+    console.info('dispatching', action)
+    let result = next(action)
+    console.log('next state', store.getState())
+    console.groupEnd(action.type)
+    return result
+}
+
+export default createStore(reducer, { car: [], products: [] }, applyMiddleware(logger, thunk));

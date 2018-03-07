@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Button, Glyphicon } from 'react-bootstrap';
-import store from '../store';
 import { addToCar } from '../actionCreators';
+import { connect } from 'react-redux';
 
 const styles = {
   products: {
@@ -16,41 +16,36 @@ const styles = {
   }
 };
 
-class ProductList extends Component {
-  constructor() {
-    super();
-    this.addToCar = this.addToCar.bind(this);
-
-    this.state = {
-      products: [
-        { id: 1, name: "Hipster Ultimate", price: 299, image: "https://s3.amazonaws.com/makeitreal/projects/e-commerce/camiseta-1.jpg" },
-        { id: 2, name: "On Motion Live", price: 99, image: "https://s3.amazonaws.com/makeitreal/projects/e-commerce/camiseta-2.jpg" },
-        { id: 3, name: "Underground Max", price: 149, image: "https://s3.amazonaws.com/makeitreal/projects/e-commerce/camiseta-3.jpg" },
-      ]
-    }
-  }
-
-  render() {
+const ProductList = ({ products, addToCar }) => {
     return (
       <div style={styles.products}>
-        {this.state.products.map(product =>
+        {products.map(product =>
           <div className="thumbnail" style={styles.product} key={product.id}>
             <img src={product.image} alt={product.name} />
             <div className="caption">
               <h4>{product.name}</h4>
               <p>
-                <Button bsStyle="primary" onClick={() => this.addToCar(product)} role="button" disabled={product.inventory <= 0}>${product.price} <Glyphicon glyph="shopping-cart" /></Button>
+                <Button bsStyle="primary" onClick={() => addToCar(product)} role="button" disabled={product.inventory <= 0}>${product.price} <Glyphicon glyph="shopping-cart" /></Button>
               </p>
             </div>
           </div>
         )}
       </div>
     );
-  }
+}
 
-  addToCar(product) {
-    store.dispatch(addToCar(product))
+const mapStateToProps = state =>{
+  return{
+    products: state.products
   }
 }
 
-export default ProductList;
+const mapDispatchToProps = dispatch =>{
+  return{
+    addToCar(product) {
+      dispatch(addToCar(product))
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProductList);

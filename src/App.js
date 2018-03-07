@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Navbar, Grid, Row, Col } from 'react-bootstrap';
 import ProductList from './components/ProductList';
-import ShoppingCart from './components/ShoppingCart';
+import ShoppingCar from './components/ShoppingCar';
 import './App.css';
 
 class App extends Component {
@@ -22,7 +22,7 @@ class App extends Component {
               <ProductList />
             </Col>
             <Col sm={4}>
-              <ShoppingCart />
+              <ShoppingCar />
             </Col>
           </Row>
         </Grid>
